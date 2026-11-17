@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teléfonos · Archivo &amp; Calificador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-badge">SERIE · 204</span>
+      <h1>Teléfonos</h1>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button id="tab-rate" class="tab active" data-view="rate">✦ Calificar</button>
+      <button id="tab-ranking" class="tab" data-view="ranking">🏆 Ranking <span id="ranking-count" class="tab-count">204</span></button>
+    </nav>
+
+    <div class="stats-pill">
+      <span>Evaluadas <strong id="stat-rated">0</strong><span class="muted">/204</span></span>
+      <span class="dot"></span>
+      <span>Media <strong id="stat-avg">–</strong></span>
+    </div>
+  </header>
+
+  <main>
+    <!-- VISTA CALIFICAR INDIVIDUAL -->
+    <section id="view-rate" class="view active">
+      <div class="rate-topbar">
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Progreso de la serie</span>
+            <span id="coverage-pct" class="mono">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="coverage-fill" class="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="toolbar-actions">
+          <label class="toggle-switch" title="Pasa automáticamente a la siguiente foto al completar todas las categorías">
+            <input type="checkbox" id="auto-next" checked />
+            <span class="toggle-track"></span>
+            <span>Auto-avanzar</span>
+          </label>
+          <button id="btn-next-unrated" class="btn">⏭ Sin calificar</button>
+          <button id="btn-shuffle" class="btn" title="Mezclar orden de fotos">🎲 Mezclar</button>
+          <button id="btn-add-cat" class="btn">+ Categoría</button>
+        </div>
+      </div>
+
+      <div class="rate-layout">
+        <div class="rate-photo-stage">
+          <div class="photo-frame">
+            <img id="rate-img" src="" alt="Foto a calificar" />
+          </div>
+          <div class="photo-caption">
+            <span id="rate-photo-meta" class="mono"></span>
+            <span id="rate-counter" class="mono counter-badge">1 / 204</span>
+          </div>
+        </div>
+
+        <div class="rate-panel">
+          <div class="rate-header">
+            <div>
+              <h2>Evaluación</h2>
+              <p class="rate-sub">Teclas <kbd>1</kbd>–<kbd>5</kbd> para puntuar · <kbd>↑</kbd><kbd>↓</kbd> categoría · <kbd>←</kbd><kbd>→</kbd> foto</p>
+            </div>
+            <div class="score-pill">
+              <span id="rate-photo-score">–</span>
+              <small>/ 5.0</small>
+            </div>
+          </div>
+
+          <div id="rate-sliders" class="rate-sliders"></div>
+
+          <div class="rate-nav">
+            <button id="btn-rate-prev" class="btn">← Anterior</button>
+            <button id="btn-rate-next" class="btn btn-primary">Siguiente →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA RANKING -->
+    <section id="view-ranking" class="view">
+      <div class="ranking-toolbar">
+        <div class="toolbar-row">
+          <div class="filter-group">
+            <span class="cat-label">Ordenar por</span>
+            <div id="ranking-sort-cats" class="cat-pills"></div>
+          </div>
+
+          <div class="filter-group">
+            <button class="btn btn-chip active" data-limit="all">Todas</button>
+            <button class="btn btn-chip" data-limit="rated">Calificadas</button>
+            <button class="btn btn-chip" data-limit="10">Top 10</button>
+            <button class="btn btn-chip" data-limit="25">Top 25</button>
+            <button class="btn btn-chip" data-limit="50">Top 50</button>
+          </div>
+        </div>
+
+        <div class="toolbar-row">
+          <div id="collab-banner" class="collab-pill hidden">
+            <span id="collab-label">👥 Combinado con 1 CSV</span>
+            <button id="btn-toggle-collab" class="btn btn-chip active">Combinado</button>
+            <button id="btn-clear-collab" class="del-cat-btn" title="Quitar CSV importado">✕</button>
+          </div>
+
+          <div class="toolbar-actions">
+            <input type="file" id="csv-import-input" accept=".csv" class="hidden" />
+            <button id="btn-import" class="btn" title="Carga el CSV de otra persona para promediar sus notas con las tuyas">⬆ Combinar CSV</button>
+            <button id="btn-export" class="btn btn-primary">⬇ Exportar CSV</button>
+            <button id="btn-reset" class="btn btn-danger">🗑 Reiniciar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ranking-grid" class="ranking-grid"></div>
+    </section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
+    <button id="lb-close" class="lb-close" aria-label="Cerrar">✕</button>
+    <div class="lb-content">
+      <img id="lb-img" src="" alt="" />
+      <div id="lb-info" class="lb-info"></div>
+      <button id="lb-edit" class="btn btn-primary">✦ Editar calificación</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
