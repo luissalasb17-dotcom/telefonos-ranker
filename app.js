@@ -99,6 +99,13 @@ function loadState() {
   }
   if (!Array.isArray(state.categories) || state.categories.length === 0) {
     state.categories = [...DEFAULT_CATEGORIES];
+  } else {
+    // Ensure core default categories can never stay missing
+    for (const def of DEFAULT_CATEGORIES) {
+      if (!state.categories.some((c) => c.id === def.id)) {
+        state.categories.push({ ...def });
+      }
+    }
   }
   if (!state.stars) state.stars = {};
 }
@@ -178,15 +185,10 @@ function renderRatePhoto() {
             `<button class="star-btn ${n <= val ? "active" : ""}" data-cat="${cat.id}" data-val="${n}" aria-label="${n} estrellas">★</button>`
         )
         .join("");
-      const delBtn =
-        state.categories.length > 1
-          ? `<button class="del-cat-btn" data-del-cat="${cat.id}" title="Eliminar categoría">✕</button>`
-          : "";
       return `
         <div class="rate-row ${idx === focusedCatIndex ? "focused" : ""}" data-cat-idx="${idx}">
           <div class="rate-row-left">
             <span class="rate-row-name">${cat.name}</span>
-            ${delBtn}
           </div>
           <div class="stars">${starsHtml}</div>
         </div>
@@ -198,6 +200,16 @@ function renderRatePhoto() {
 function setRating(catId, val) {
   const p = photos[rateOrder[rateIndex]];
   if (!state.stars[p.id]) state.stars[p.id] = {};
+
+  const currentVal = state.stars[p.id][catId] || 0;
+  if (val === 0 || currentVal === val) {
+    delete state.stars[p.id][catId];
+    saveState();
+    updateStats();
+    renderRatePhoto();
+    return;
+  }
+
   state.stars[p.id][catId] = val;
   saveState();
   updateStats();
@@ -567,7 +579,11 @@ function bindEvents() {
     }
     if (!viewRate.classList.contains("active")) return;
 
-    if (e.key >= "1" && e.key <= "5") {
+    if (e.key === "0" || e.key === "Backspace") {
+      e.preventDefault();
+      const cat = state.categories[focusedCatIndex];
+      if (cat) setRating(cat.id, 0);
+    } else if (e.key >= "1" && e.key <= "5") {
       e.preventDefault();
       const cat = state.categories[focusedCatIndex];
       if (cat) setRating(cat.id, Number(e.key));
