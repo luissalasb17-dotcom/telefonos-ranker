@@ -179,12 +179,14 @@ function renderRatePhoto() {
   rateSliders.innerHTML = state.categories
     .map((cat, idx) => {
       const val = photoStars[cat.id] || 0;
-      const starsHtml = [1, 2, 3, 4, 5]
-        .map(
-          (n) =>
-            `<button class="star-btn ${n <= val ? "active" : ""}" data-cat="${cat.id}" data-val="${n}" aria-label="${n} estrellas">★</button>`
-        )
-        .join("");
+      const starsHtml =
+        [1, 2, 3, 4, 5]
+          .map(
+            (n) =>
+              `<button class="star-btn ${n <= val ? "active" : ""}" data-cat="${cat.id}" data-val="${n}" aria-label="${n} estrellas">★</button>`
+          )
+          .join("") +
+        `<button class="clear-star-btn" data-cat="${cat.id}" data-val="0" title="Quitar estrellas (0)">0</button>`;
       return `
         <div class="rate-row ${idx === focusedCatIndex ? "focused" : ""}" data-cat-idx="${idx}">
           <div class="rate-row-left">
@@ -459,7 +461,7 @@ function bindEvents() {
       return;
     }
 
-    const starBtn = e.target.closest(".star-btn");
+    const starBtn = e.target.closest(".star-btn, .clear-star-btn");
     if (starBtn) {
       setRating(starBtn.dataset.cat, Number(starBtn.dataset.val));
       return;

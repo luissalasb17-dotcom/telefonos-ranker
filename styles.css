@@ -455,7 +455,34 @@ kbd {
   text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
-.star-btn:hover { transform: scale(1.22); color: #fbbf24; }
+@media (hover: hover) {
+  .star-btn:hover { transform: scale(1.22); color: #fbbf24; }
+}
+
+.clear-star-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  align-self: center;
+  transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.clear-star-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.06);
+}
 
 .rate-nav {
   display: grid;
